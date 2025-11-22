@@ -3,18 +3,20 @@ import styled from 'styled-components';
 
 const MobileContainer = styled.div`
   width: 100%;
-  height: 100%; /* vh 대신 %를 사용하여 부모 높이에 맞춤 */
   max-width: 400px;
-  max-width: 100vw; /* 대형 화면에서 좌우 여백 과다 방지 */
+  min-height: 100vh;
+  min-height: -webkit-fill-available; /* iOS Safari 대응 */
   padding: 40px 24px;
   padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); /* 안전 영역 대응 */
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
   overflow-x: hidden; /* 가로 스크롤 원천 차단 */
   box-sizing: border-box; /* 패딩이 높이에 영향을 주지 않도록 설정 */
   background-color: #FFF0F5; /* 배경색 통일 */
+  margin: 0 auto;
   
   @media (max-width: 480px) {
     padding: 30px 20px;
@@ -74,11 +76,12 @@ const BgBubble = styled.div`
 
 const EmotionText = styled.div`
   font-size: 15px;
-  color: #b48a9f;
+  color: #a67a8f; /* 더 진한 색으로 대비 개선 */
   font-style: italic;
   margin-bottom: 18px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em; /* 자간 약간 증가 */
   text-align: center;
+  line-height: 1.6; /* 줄 간격 추가 */
   @media (max-width: 480px) {
     font-size: 14px;
   }
@@ -89,7 +92,7 @@ const EmotionText = styled.div`
   }
   
   @media (max-width: 360px) {
-    font-size: 12px;
+    font-size: 13px; /* 12px에서 13px로 최소 크기 증가 */
     margin-bottom: 12px;
   }
 `;
@@ -116,10 +119,11 @@ const Header = styled.header`
 const Title = styled.h1`
   font-size: 32px;
   font-size: clamp(24px, 8vw, 32px); /* 반응형 폰트 */
-  line-height: 1.35;
+  line-height: 1.4; /* 줄 간격 약간 증가 */
   color: #FF5E89;
   margin-bottom: 10px;
   text-shadow: 2px 2px 0px #FFFFFF;
+  letter-spacing: -0.01em; /* 타이틀 자간 조정 */
   @media (max-width: 480px) {
     font-size: 28px;
   }
@@ -127,6 +131,7 @@ const Title = styled.h1`
   @media (max-width: 375px) {
     font-size: 24px;
     margin-bottom: 8px;
+    line-height: 1.35;
   }
   
   @media (max-width: 360px) {
@@ -138,22 +143,23 @@ const Title = styled.h1`
 const Subtitle = styled.p`
   font-size: 18px; /* 글씨 크기 키움 */
   font-size: clamp(16px, 5vw, 18px); /* 반응형 폰트 적용 */
-  color: #887878;
+  color: #7a6a6a; /* 더 진한 색으로 대비 개선 */
   font-weight: normal;
   line-height: 1.7;
   margin-top: 10px; /* 위쪽 여백 추가 */
+  letter-spacing: 0.01em; /* 자간 추가 */
   @media (max-width: 480px) {
     font-size: 17px;
   }
   
   @media (max-width: 375px) {
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.6; /* 줄 간격 개선 */
   }
   
   @media (max-width: 360px) {
     font-size: 15px;
-    line-height: 1.4;
+    line-height: 1.5;
   }
 `;
 
@@ -224,8 +230,19 @@ const Badge = styled.span`
   color: #FF5E89;
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: clamp(13px, 3.5vw, 14px); /* 반응형 폰트 추가 */
   margin-bottom: 16px;
+  font-weight: 500; /* 가독성 향상 */
+  letter-spacing: 0.01em;
+  
+  @media (max-width: 375px) {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+  
+  @media (max-width: 360px) {
+    font-size: 13px;
+  }
 `;
 
 const CardText = styled.p`

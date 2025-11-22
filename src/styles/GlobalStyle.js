@@ -27,13 +27,14 @@ export const GlobalStyle = createGlobalStyle`
 
   #root {
     width: 100%;
-    height: 100vh;
-    height: -webkit-fill-available; /* iOS Safari 대응 */
+    min-height: 100vh;
+    min-height: -webkit-fill-available; /* iOS Safari 대응 */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     position: relative;
     overflow-x: hidden;
+    overflow-y: auto;
   }
 
   /* 모바일 화면 크기별 미디어 쿼리 */

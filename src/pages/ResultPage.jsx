@@ -5,9 +5,9 @@ import confetti from 'canvas-confetti';
 
 const MobileContainer = styled.div`
   width: 100%;
-  height: 100%; /* vh 대신 %를 사용하여 부모 높이에 맞춤 */
   max-width: 400px;
-  max-width: 100vw; /* 대형 화면에서 좌우 여백 과다 방지 */
+  min-height: 100vh;
+  min-height: -webkit-fill-available; /* iOS Safari 대응 */
   padding: 40px 24px;
   padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); /* 안전 영역 대응 */
   display: flex;
@@ -21,6 +21,7 @@ const MobileContainer = styled.div`
   -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
   box-sizing: border-box; /* 패딩이 높이에 영향을 주지 않도록 설정 */
   background-color: #FFF0F5; /* 배경색 통일 */
+  margin: 0 auto;
   
   @media (max-width: 480px) {
     padding: 30px 20px;
@@ -156,9 +157,11 @@ const ResultText = styled.p`
 const ScoreText = styled.div`
   font-size: 18px;
   font-size: clamp(16px, 4.5vw, 18px); /* 반응형 폰트 */
-  color: #887878;
+  color: #7a6a6a; /* 더 진한 색으로 대비 개선 */
   margin-bottom: 20px;
   word-break: keep-all;
+  font-weight: 500; /* 가독성 향상 */
+  letter-spacing: 0.01em; /* 자간 추가 */
   
   @media (max-width: 480px) {
     font-size: 17px;
@@ -426,13 +429,14 @@ function ResultPage() {
         <ResultText>{result.text}</ResultText>
         {result.quote && (
           <div style={{
-            fontSize: '15px',
-            color: '#b48a9f',
+            fontSize: 'clamp(14px, 3.8vw, 15px)', // 반응형 폰트
+            color: '#9a6a7f', // 더 진한 색으로 대비 개선
             fontStyle: 'italic',
             margin: '16px 0 8px 0',
-            lineHeight: 1.5,
+            lineHeight: 1.6, // 줄 간격 개선
+            letterSpacing: '0.02em', // 자간 추가
           }}>
-            “{result.quote}”
+            "{result.quote}"
           </div>
         )}
         <ScoreText>내 생각 점수: {score}점</ScoreText>
