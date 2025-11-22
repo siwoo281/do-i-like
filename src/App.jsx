@@ -1,5 +1,6 @@
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
 import LandingPage from './pages/LandingPage';
 import QuestionPage from './pages/QuestionPage';
 import ResultPage from './pages/ResultPage';
@@ -60,6 +61,7 @@ function App() {
     <HashRouter>
       <GlobalStyle />
       <AnimatedRoutes />
+      <Analytics />
     </HashRouter>
   );
 }
