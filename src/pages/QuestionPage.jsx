@@ -154,36 +154,36 @@ const CardWrapper = styled.main`
 const QuestionText = styled.p`
   font-size: 24px;
   font-size: clamp(18px, 6vw, 24px); /* 반응형 폰트 */
-  line-height: 1.5;
+  line-height: 1.6;
   color: #333;
-  margin-bottom: 24px;
+  margin-bottom: 26px;
   margin-top: 0;
   word-break: keep-all; /* 단어 단위 줄바꿈 */
   white-space: pre-line; /* 개행 문자 적용 */
   
   @media (max-width: 480px) {
     font-size: 20px;
-    margin-bottom: 20px;
-    line-height: 1.45;
+    margin-bottom: 22px;
+    line-height: 1.55;
   }
   
   @media (max-width: 375px) {
     font-size: 18px;
-    margin-bottom: 16px;
-    line-height: 1.4;
+    margin-bottom: 18px;
+    line-height: 1.5;
   }
   
   @media (max-width: 360px) {
-    font-size: 16px;
-    margin-bottom: 14px;
-    line-height: 1.35;
+    font-size: 17px;
+    margin-bottom: 16px;
+    line-height: 1.45;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 16px;
-    margin-bottom: 10px;
-    line-height: 1.3;
+    margin-bottom: 12px;
+    line-height: 1.4;
   }
 `;
 
@@ -191,7 +191,7 @@ const AnswerButton = styled.button`
   width: 100%;
   min-height: 56px; /* 터치 영역 최소 크기 상향 */
   padding: 16px 18px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   border: none;
   border-radius: 30px;
   background: ${props => props.selected 
@@ -219,11 +219,15 @@ const AnswerButton = styled.button`
   &:active:not(:disabled) {
     transform: scale(0.97);
   }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
   
   @media (max-width: 480px) {
     font-size: 17px;
     padding: 14px 16px;
-    margin-bottom: 12px;
+    margin-bottom: 11px;
   }
   
   @media (max-width: 375px) {
@@ -235,7 +239,7 @@ const AnswerButton = styled.button`
   @media (max-width: 360px) {
     font-size: 15px;
     padding: 11px 12px;
-    margin-bottom: 8px;
+    margin-bottom: 9px;
     min-height: 48px;
   }
   
@@ -244,7 +248,7 @@ const AnswerButton = styled.button`
     font-size: 15px;
     padding: 10px 16px;
     min-height: 44px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 `;
 

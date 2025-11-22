@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const CloudCard = styled.div`
   background: #fff;
   width: 100%;
-  padding: 36px 20px;
+  padding: 40px 24px;
   border-radius: 32px;
   box-shadow: 0 8px 32px rgba(255, 148, 178, 0.25);
   border: 2px solid #FFB6C1;
@@ -18,23 +18,23 @@ export const CloudCard = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 30px 18px;
+    padding: 36px 22px;
   }
   
   @media (max-width: 375px) {
-    padding: 26px 16px;
-    border-radius: 24px;
+    padding: 32px 20px;
+    border-radius: 28px;
   }
   
   @media (max-width: 360px) {
-    padding: 22px 14px;
-    border-radius: 20px;
+    padding: 28px 18px;
+    border-radius: 24px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    padding: 18px 16px;
-    border-radius: 20px;
+    padding: 24px 20px;
+    border-radius: 24px;
   }
 `;
 

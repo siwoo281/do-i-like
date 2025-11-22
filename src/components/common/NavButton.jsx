@@ -21,12 +21,12 @@ export const NavButton = styled.button`
   opacity: ${props => props.disabled ? 0.5 : 1};
 
   &:hover:not(:disabled) {
-    opacity: 0.9;
+    opacity: 0.85;
     transform: scale(0.98);
   }
 
   &:active:not(:disabled) {
-    opacity: 0.8;
+    opacity: 0.7;
     transform: scale(0.95);
   }
 

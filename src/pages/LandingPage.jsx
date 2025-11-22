@@ -54,25 +54,29 @@ const EmotionText = styled.div`
   margin-top: 0;
   letter-spacing: 0.02em; /* 자간 약간 증가 */
   text-align: center;
-  line-height: 1.6; /* 줄 간격 추가 */
+  line-height: 1.7; /* 줄 간격 증가로 가독성 향상 */
   @media (max-width: 480px) {
     font-size: 14px;
     margin-bottom: 14px;
+    line-height: 1.65;
   }
   
   @media (max-width: 375px) {
     font-size: 13px;
     margin-bottom: 12px;
+    line-height: 1.6;
   }
   
   @media (max-width: 360px) {
-    font-size: 13px; /* 12px에서 13px로 최소 크기 증가 */
+    font-size: 13px; /* 최소 크기 유지 */
     margin-bottom: 10px;
+    line-height: 1.55;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     margin-bottom: 8px;
+    line-height: 1.5;
   }
 `;
 
@@ -138,30 +142,32 @@ const Subtitle = styled.p`
   font-size: clamp(16px, 5vw, 18px); /* 반응형 폰트 적용 */
   color: #7a6a6a; /* 더 진한 색으로 대비 개선 */
   font-weight: normal;
-  line-height: 1.7;
+  line-height: 1.75; /* 줄 간격 증가로 가독성 향상 */
   margin-top: 8px;
   margin-bottom: 0;
   letter-spacing: 0.01em; /* 자간 추가 */
   @media (max-width: 480px) {
     font-size: 17px;
     margin-top: 7px;
+    line-height: 1.7;
   }
   
   @media (max-width: 375px) {
     font-size: 16px;
-    line-height: 1.6; /* 줄 간격 개선 */
+    line-height: 1.65; /* 줄 간격 개선 */
     margin-top: 6px;
   }
   
   @media (max-width: 360px) {
     font-size: 15px;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-top: 5px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     margin-top: 4px;
+    line-height: 1.55;
   }
 `;
 
@@ -251,31 +257,32 @@ const Badge = styled.span`
 
 const CardText = styled.p`
   font-size: 24px;
-  font-size: clamp(18px, 6vw, 24px); /* 반응형 폰트 */
-  line-height: 1.5;
+  font-size: clamp(17px, 6vw, 24px); /* 반응형 폰트 - 최소 크기 17px로 증가 */
+  line-height: 1.7; /* 줄 간격 증가로 가독성 향상 */
   color: #333;
   word-break: keep-all; /* 단어 단위 줄바꿈 */
   margin: 0;
+  white-space: pre-line; /* 개행 문자 유지 */
   
   @media (max-width: 480px) {
-    font-size: 20px;
-    line-height: 1.45;
+    font-size: 19px;
+    line-height: 1.65;
   }
   
   @media (max-width: 375px) {
     font-size: 18px;
-    line-height: 1.4;
+    line-height: 1.6;
   }
   
   @media (max-width: 360px) {
-    font-size: 16px;
-    line-height: 1.35;
+    font-size: 17px; /* 16px에서 17px로 증가 */
+    line-height: 1.55;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    font-size: 16px;
-    line-height: 1.3;
+    font-size: 17px;
+    line-height: 1.5;
   }
 `;
 
@@ -351,13 +358,13 @@ function LandingPage() {
       <BgBubble className="b3" />
 
       <Header>
-        <EmotionText>좋아하는 감정, 애매함과 설렘 사이에서</EmotionText>
+        <EmotionText>애매한 감정, 설렘과 혼란 사이에서</EmotionText>
         <Title>
-          자꾸 헷갈리게 하는<br />
-          그 사람, 내 생각은?
+          나도 모르게<br />
+          자꾸 신경 쓰이는 그 사람
         </Title>
         <Subtitle>
-          내가 그 사람을 좋아하는지<br />
+          내 마음이 뭔지<br />
           확인해보는 테스트
         </Subtitle>
       </Header>

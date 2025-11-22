@@ -10,23 +10,28 @@ import { createShareText, createShareUrl, copyToClipboard, shareNative } from '.
 
 const StyledMobileContainer = styled(MobileContainer)`
   justify-content: flex-start;
-  gap: 20px;
+  gap: 24px;
+  padding-top: 30px;
   
   @media (max-width: 480px) {
-    gap: 18px;
+    gap: 22px;
+    padding-top: 26px;
   }
   
   @media (max-width: 375px) {
-    gap: 16px;
+    gap: 20px;
+    padding-top: 22px;
   }
   
   @media (max-width: 360px) {
-    gap: 14px;
+    gap: 18px;
+    padding-top: 20px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    gap: 12px;
+    gap: 16px;
+    padding-top: 16px;
   }
 `;
 
@@ -51,23 +56,23 @@ const ResultCard = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 36px 22px;
+    padding: 36px 24px;
   }
   
   @media (max-width: 375px) {
-    padding: 32px 20px;
-    border-radius: 24px;
+    padding: 32px 22px;
+    border-radius: 28px;
   }
   
   @media (max-width: 360px) {
-    padding: 28px 18px;
-    border-radius: 20px;
+    padding: 28px 20px;
+    border-radius: 24px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    padding: 20px 18px;
-    border-radius: 20px;
+    padding: 24px 20px;
+    border-radius: 24px;
   }
 `;
 
@@ -75,64 +80,64 @@ const ResultTitle = styled.h2`
   font-size: 32px;
   font-size: clamp(24px, 8vw, 32px); /* 반응형 폰트 */
   color: #FF5E89;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   margin-top: 0;
   text-shadow: 2px 2px 0px #FFFFFF;
   word-break: keep-all; /* 단어 단위 줄바꿈 */
   
   @media (max-width: 480px) {
     font-size: 28px;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
   
   @media (max-width: 375px) {
     font-size: 24px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
   
   @media (max-width: 360px) {
     font-size: 22px;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 20px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 `;
 
 const ResultEmoji = styled.div`
-  font-size: 60px;
+  font-size: 64px;
   margin-bottom: 16px;
   margin-top: 0;
   
   @media (max-width: 480px) {
-    font-size: 55px;
+    font-size: 60px;
     margin-bottom: 14px;
   }
   
   @media (max-width: 375px) {
-    font-size: 50px;
+    font-size: 56px;
     margin-bottom: 12px;
   }
   
   @media (max-width: 360px) {
-    font-size: 45px;
+    font-size: 52px;
     margin-bottom: 10px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    font-size: 40px;
-    margin-bottom: 8px;
+    font-size: 48px;
+    margin-bottom: 10px;
   }
 `;
 
 const ResultText = styled.p`
   font-size: 20px;
   font-size: clamp(16px, 5vw, 20px); /* 반응형 폰트 */
-  line-height: 1.7;
+  line-height: 1.8;
   color: #333;
   margin-bottom: 18px;
   margin-top: 0;
@@ -142,26 +147,26 @@ const ResultText = styled.p`
   @media (max-width: 480px) {
     font-size: 18px;
     margin-bottom: 16px;
-    line-height: 1.65;
+    line-height: 1.75;
   }
   
   @media (max-width: 375px) {
     font-size: 17px;
     margin-bottom: 14px;
-    line-height: 1.6;
+    line-height: 1.7;
   }
   
   @media (max-width: 360px) {
     font-size: 16px;
     margin-bottom: 12px;
-    line-height: 1.55;
+    line-height: 1.65;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 15px;
     margin-bottom: 10px;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 `;
 
@@ -170,26 +175,30 @@ const ScoreText = styled.div`
   font-size: clamp(16px, 4.5vw, 18px); /* 반응형 폰트 */
   color: #7a6a6a; /* 더 진한 색으로 대비 개선 */
   margin-bottom: 0;
-  margin-top: 0;
+  margin-top: 12px;
   word-break: keep-all;
   font-weight: 500; /* 가독성 향상 */
   letter-spacing: 0.01em; /* 자간 추가 */
   
   @media (max-width: 480px) {
     font-size: 17px;
+    margin-top: 10px;
   }
   
   @media (max-width: 375px) {
     font-size: 17px;
+    margin-top: 8px;
   }
   
   @media (max-width: 360px) {
     font-size: 16px;
+    margin-top: 8px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 15px;
+    margin-top: 6px;
   }
 `;
 
@@ -197,25 +206,25 @@ const ButtonGroup = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-top: 0;
   margin-bottom: 0;
   
   @media (max-width: 480px) {
-    gap: 9px;
+    gap: 11px;
   }
   
   @media (max-width: 375px) {
-    gap: 8px;
+    gap: 10px;
   }
   
   @media (max-width: 360px) {
-    gap: 7px;
+    gap: 9px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    gap: 6px;
+    gap: 8px;
   }
 `;
 
