@@ -15,10 +15,10 @@ function AnimatedRoutes() {
           path="/"
           element={
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, ease: 'easeInOut' }}
             >
               <LandingPage />
             </motion.div>
@@ -28,10 +28,10 @@ function AnimatedRoutes() {
           path="/question"
           element={
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, ease: 'easeInOut' }}
             >
               <QuestionPage />
             </motion.div>
@@ -41,10 +41,10 @@ function AnimatedRoutes() {
           path="/result"
           element={
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, ease: 'easeInOut' }}
             >
               <ResultPage />
             </motion.div>
@@ -65,4 +65,3 @@ function App() {
 }
 
 export default App;
-

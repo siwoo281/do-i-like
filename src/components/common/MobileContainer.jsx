@@ -15,7 +15,7 @@ export const MobileContainer = styled.div`
   overflow-y: auto; /* 세로 스크롤 허용 */
   -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
   box-sizing: border-box; /* 패딩이 높이에 영향을 주지 않도록 설정 */
-  background-color: #FFF0F5; /* 배경색 통일 */
+  background: linear-gradient(180deg, #FFF0F5 0%, #FFDEE9 100%); /* body와 동일한 그라디언트 */
   margin: 0 auto;
   
   @media (max-width: 480px) {
@@ -37,4 +37,3 @@ export const MobileContainer = styled.div`
     min-height: 100vh;
   }
 `;
-
