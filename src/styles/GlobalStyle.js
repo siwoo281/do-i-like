@@ -58,7 +58,14 @@ export const GlobalStyle = createGlobalStyle`
     
     #root {
       align-items: flex-start;
-      padding: 20px 0;
+      padding: 10px 0;
+    }
+  }
+  
+  /* 매우 작은 화면 대응 */
+  @media (max-width: 320px) {
+    body {
+      font-size: 14px;
     }
   }
 

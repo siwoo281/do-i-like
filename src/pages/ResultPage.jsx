@@ -1,59 +1,44 @@
 import { useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import confetti from 'canvas-confetti';
+import { MobileContainer } from '../components/common/MobileContainer';
+import { QuoteText } from '../components/common/QuoteText';
+import { getResultByScore } from '../data/results';
+import { createShareText, createShareUrl, copyToClipboard, shareNative } from '../utils/share';
 
-const MobileContainer = styled.div`
-  width: 100%;
-  max-width: 400px;
-  min-height: 100vh;
-  min-height: -webkit-fill-available; /* iOS Safari 대응 */
-  padding: 40px 24px;
-  padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); /* 안전 영역 대응 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const StyledMobileContainer = styled(MobileContainer)`
   justify-content: flex-start;
-  gap: 24px;
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden; /* 가로 스크롤 원천 차단 */
-  -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
-  box-sizing: border-box; /* 패딩이 높이에 영향을 주지 않도록 설정 */
-  background-color: #FFF0F5; /* 배경색 통일 */
-  margin: 0 auto;
+  gap: 20px;
   
   @media (max-width: 480px) {
-    padding: 30px 20px;
-    gap: 22px;
+    gap: 18px;
   }
   
   @media (max-width: 375px) {
-    padding: 24px 20px;
-    gap: 20px;
+    gap: 16px;
   }
   
   @media (max-width: 360px) {
-    padding: 20px 16px;
-    gap: 18px;
+    gap: 14px;
   }
   
   /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    padding: 16px 24px;
-    gap: 16px;
+    gap: 12px;
   }
 `;
 
 const ResultCard = styled.div`
   background: #fff;
   width: 100%;
-  padding: 50px 30px;
+  padding: 40px 28px;
   border-radius: 32px;
   box-shadow: 0 8px 32px rgba(255, 148, 178, 0.25);
   border: 2px solid #FFB6C1;
-  margin-top: 20px;
-  margin-bottom: 24px;
+  margin-top: 0;
+  margin-bottom: 0;
   text-align: center;
   position: relative;
   z-index: 5;
@@ -66,21 +51,23 @@ const ResultCard = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 45px 28px;
+    padding: 36px 22px;
   }
   
   @media (max-width: 375px) {
-    padding: 40px 24px;
+    padding: 32px 20px;
     border-radius: 24px;
-    margin-top: 16px;
-    margin-bottom: 20px;
   }
   
   @media (max-width: 360px) {
-    padding: 32px 20px;
+    padding: 28px 18px;
     border-radius: 20px;
-    margin-top: 12px;
-    margin-bottom: 16px;
+  }
+  
+  /* 가로 모드 대응 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 20px 18px;
+    border-radius: 20px;
   }
 `;
 
@@ -88,41 +75,57 @@ const ResultTitle = styled.h2`
   font-size: 32px;
   font-size: clamp(24px, 8vw, 32px); /* 반응형 폰트 */
   color: #FF5E89;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  margin-top: 0;
   text-shadow: 2px 2px 0px #FFFFFF;
   word-break: keep-all; /* 단어 단위 줄바꿈 */
   
   @media (max-width: 480px) {
     font-size: 28px;
+    margin-bottom: 14px;
   }
   
   @media (max-width: 375px) {
     font-size: 24px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
   
   @media (max-width: 360px) {
     font-size: 22px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+  }
+  
+  /* 가로 모드 대응 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 20px;
+    margin-bottom: 8px;
   }
 `;
 
 const ResultEmoji = styled.div`
   font-size: 60px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  margin-top: 0;
   
   @media (max-width: 480px) {
     font-size: 55px;
+    margin-bottom: 14px;
   }
   
   @media (max-width: 375px) {
     font-size: 50px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
   
   @media (max-width: 360px) {
     font-size: 45px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+  }
+  
+  /* 가로 모드 대응 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 40px;
+    margin-bottom: 8px;
   }
 `;
 
@@ -131,26 +134,34 @@ const ResultText = styled.p`
   font-size: clamp(16px, 5vw, 20px); /* 반응형 폰트 */
   line-height: 1.7;
   color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 18px;
+  margin-top: 0;
   white-space: pre-line;
   word-break: keep-all; /* 단어 단위 줄바꿈 */
   
   @media (max-width: 480px) {
     font-size: 18px;
-    margin-bottom: 26px;
+    margin-bottom: 16px;
+    line-height: 1.65;
   }
   
   @media (max-width: 375px) {
     font-size: 17px;
-    margin-bottom: 24px;
-    line-height: 1.65;
-    padding: 0;
+    margin-bottom: 14px;
+    line-height: 1.6;
   }
   
   @media (max-width: 360px) {
     font-size: 16px;
-    margin-bottom: 20px;
-    line-height: 1.6;
+    margin-bottom: 12px;
+    line-height: 1.55;
+  }
+  
+  /* 가로 모드 대응 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 15px;
+    margin-bottom: 10px;
+    line-height: 1.5;
   }
 `;
 
@@ -158,7 +169,8 @@ const ScoreText = styled.div`
   font-size: 18px;
   font-size: clamp(16px, 4.5vw, 18px); /* 반응형 폰트 */
   color: #7a6a6a; /* 더 진한 색으로 대비 개선 */
-  margin-bottom: 20px;
+  margin-bottom: 0;
+  margin-top: 0;
   word-break: keep-all;
   font-weight: 500; /* 가독성 향상 */
   letter-spacing: 0.01em; /* 자간 추가 */
@@ -169,12 +181,15 @@ const ScoreText = styled.div`
   
   @media (max-width: 375px) {
     font-size: 17px;
-    margin-bottom: 20px;
   }
   
   @media (max-width: 360px) {
     font-size: 16px;
-    margin-bottom: 18px;
+  }
+  
+  /* 가로 모드 대응 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 15px;
   }
 `;
 
@@ -182,31 +197,32 @@ const ButtonGroup = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
   
   @media (max-width: 480px) {
-    gap: 11px;
+    gap: 9px;
   }
   
   @media (max-width: 375px) {
-    gap: 10px;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    gap: 8px;
   }
   
   @media (max-width: 360px) {
-    gap: 8px;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    gap: 7px;
+  }
+  
+  /* 가로 모드 대응 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    gap: 6px;
   }
 `;
 
 const ActionButton = styled.button`
   width: 100%;
   min-height: 56px; /* 터치 영역 최소 크기 상향 */
-  padding: 18px;
+  padding: 16px 18px;
   border: none;
   border-radius: 30px;
   background: ${props => props.variant === 'primary' 
@@ -235,17 +251,17 @@ const ActionButton = styled.button`
   
   @media (max-width: 480px) {
     font-size: 17px;
-    padding: 16px;
+    padding: 14px 16px;
   }
   
   @media (max-width: 375px) {
     font-size: 16px;
-    padding: 14px;
+    padding: 12px 14px;
   }
   
   @media (max-width: 360px) {
     font-size: 15px;
-    padding: 12px;
+    padding: 11px 12px;
     min-height: 48px;
   }
   
@@ -267,32 +283,6 @@ const LoadingContainer = styled.div`
   font-family: 'Jua', sans-serif;
 `;
 
-const results = {
-  innocent: {
-    emoji: '🧊',
-    title: '별로',
-    text: '아직은 그 사람에게\n특별한 감정이 없는 것 같아요.\n\n지금은 친구로서의 마음이\n더 큰 상태예요.\n\n마음은 언제든 변할 수 있으니\n조급해하지 말고\n자연스럽게 지켜보세요.\n',
-    quote: '진짜 인연은 언젠가 반드시 만난다.',
-    minScore: 0,
-    maxScore: 9
-  },
-  suspended: {
-    emoji: '🤔',
-    title: '애매함',
-    text: '요즘 그 사람을\n자주 떠올리고 있네요.\n\n아직은 확신할 수 없지만\n평소보다 더 신경 쓰이는 건 사실!\n\n이 감정이 어떻게 자랄지\n조금 더 솔직하게\n내 마음을 들여다보세요.\n',
-    quote: '모든 시작은 작은 관심에서 비롯된다.',
-    minScore: 10,
-    maxScore: 19
-  },
-  life: {
-    emoji: '💘',
-    title: '확실',
-    text: '이미 마음이\n많이 기울어 있는 상태예요!\n\n그 사람을 생각하면 설레고\n작은 행동에도 의미를 두게 되죠.\n\n이제 내 감정을 인정하고\n조금 더 용기 내어\n다가가 보는 건 어떨까요?\n',
-    quote: '용기는 사랑을 현실로 만든다.',
-    minScore: 20,
-    maxScore: 30
-  }
-};
 
 function ResultPage() {
   const navigate = useNavigate();
@@ -305,14 +295,7 @@ function ResultPage() {
 
   useEffect(() => {
     // 점수에 따라 결과 결정
-    let selectedResult;
-    if (score >= results.life.minScore) {
-      selectedResult = results.life;
-    } else if (score >= results.suspended.minScore) {
-      selectedResult = results.suspended;
-    } else {
-      selectedResult = results.innocent;
-    }
+    const selectedResult = getResultByScore(score);
     setResult(selectedResult);
 
     // 효과는 한 번만 실행
@@ -332,7 +315,8 @@ function ResultPage() {
         const timeLeft = animationEnd - Date.now();
 
         if (timeLeft <= 0) {
-          return clearInterval(interval);
+          clearInterval(interval);
+          return;
         }
 
         const particleCount = 50 * (timeLeft / duration);
@@ -353,11 +337,16 @@ function ResultPage() {
       if (navigator.vibrate) {
         navigator.vibrate([200, 100, 200]);
       }
+
+      // cleanup 함수로 interval 정리
+      return () => {
+        clearInterval(interval);
+      };
     }
   }, [score, hasTriggeredEffects]);
 
   const handleSaveImage = async () => {
-    if (!resultCardRef.current || isSavingImage) return;
+    if (!resultCardRef.current || isSavingImage || !result) return;
 
     setIsSavingImage(true);
     try {
@@ -365,47 +354,50 @@ function ResultPage() {
       const html2canvas = (await import('html2canvas')).default;
       const canvas = await html2canvas(resultCardRef.current, {
         backgroundColor: null,
-        scale: 2
+        scale: 2,
+        useCORS: true,
+        logging: false
       });
       
       const link = document.createElement('a');
       link.download = `애매한감정_${result.title}.png`;
       link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error('이미지 저장 실패:', error);
-      alert('이미지 저장에 실패했습니다.');
+      alert('이미지 저장에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsSavingImage(false);
     }
   };
 
   const handleShare = async () => {
-    const shareText = `애매한 감정, 좋아하는 걸까? 테스트 결과: ${result.title}!\n점수: ${score}점\n\n${result.text}`;
-    // 메인 페이지만 공유 (테스트를 처음부터 할 수 있도록)
-    const shareUrl = window.location.origin + (window.location.pathname || '') + '#/';
+    if (!result) return;
 
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: '애매한 감정, 좋아하는 걸까?',
-          text: shareText,
-          url: shareUrl
-        });
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          console.error('공유 실패:', error);
-        }
-      }
+    const shareText = createShareText(result, score);
+    const shareUrl = createShareUrl();
+
+    // 네이티브 공유 API 시도
+    const shared = await shareNative({
+      title: '애매한 감정, 좋아하는 걸까?',
+      text: shareText,
+      url: shareUrl
+    });
+
+    if (shared) {
+      return; // 공유 성공
+    }
+
+    // 네이티브 공유가 실패하거나 지원되지 않는 경우 클립보드 복사
+    const textToCopy = `${shareText}\n${shareUrl}`;
+    const copied = await copyToClipboard(textToCopy);
+
+    if (copied) {
+      alert('링크가 클립보드에 복사되었습니다!');
     } else {
-      // 클립보드 복사로 대체
-      try {
-        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-        alert('링크가 클립보드에 복사되었습니다!');
-      } catch (error) {
-        console.error('클립보드 복사 실패:', error);
-        alert('공유 기능을 사용할 수 없습니다.');
-      }
+      alert('공유 기능을 사용할 수 없습니다. 링크를 수동으로 복사해주세요.');
     }
   };
 
@@ -422,22 +414,15 @@ function ResultPage() {
   }
 
   return (
-    <MobileContainer>
+    <StyledMobileContainer>
       <ResultCard ref={resultCardRef}>
         <ResultEmoji>{result.emoji}</ResultEmoji>
         <ResultTitle>{result.title}</ResultTitle>
         <ResultText>{result.text}</ResultText>
         {result.quote && (
-          <div style={{
-            fontSize: 'clamp(14px, 3.8vw, 15px)', // 반응형 폰트
-            color: '#9a6a7f', // 더 진한 색으로 대비 개선
-            fontStyle: 'italic',
-            margin: '16px 0 8px 0',
-            lineHeight: 1.6, // 줄 간격 개선
-            letterSpacing: '0.02em', // 자간 추가
-          }}>
+          <QuoteText>
             "{result.quote}"
-          </div>
+          </QuoteText>
         )}
         <ScoreText>내 생각 점수: {score}점</ScoreText>
       </ResultCard>
@@ -466,7 +451,7 @@ function ResultPage() {
           다시 테스트하기 🔄
         </ActionButton>
       </ButtonGroup>
-    </MobileContainer>
+    </StyledMobileContainer>
   );
 }
 
