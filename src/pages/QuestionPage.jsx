@@ -268,33 +268,75 @@ function QuestionPage() {
       <Header style={{ position: 'relative', width: '100%' }}>
         {/* 좌측 상단: 질문 1에서는 메인으로, 2번 이후부터는 이전 질문 */}
         {currentQuestion === 0 ? (
-          <NavButton onClick={() => navigate('/')}>
+          <NavButton 
+            onClick={() => navigate('/')}
+            aria-label="메인 페이지로 돌아가기"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/');
+              }
+            }}
+          >
             메인으로
           </NavButton>
         ) : (
-          <NavButton onClick={handlePrev} disabled={isTransitioning}>
+          <NavButton 
+            onClick={handlePrev} 
+            disabled={isTransitioning}
+            aria-label="이전 질문으로 돌아가기"
+            onKeyDown={(e) => {
+              if ((e.key === 'Enter' || e.key === ' ') && !isTransitioning) {
+                e.preventDefault();
+                handlePrev();
+              }
+            }}
+          >
             ← 이전 질문
           </NavButton>
         )}
         <Title>질문 {currentQuestion + 1} / {questions.length}</Title>
-        <ProgressBar>
+        <ProgressBar 
+          role="progressbar"
+          aria-valuenow={currentQuestion + 1}
+          aria-valuemin={1}
+          aria-valuemax={questions.length}
+          aria-label={`질문 진행률: ${currentQuestion + 1}번째 질문`}
+        >
           <ProgressFill progress={progress} />
         </ProgressBar>
       </Header>
 
       <CardWrapper>
         <CloudCard>
-          <QuestionText>{currentQ.text}</QuestionText>
+          <QuestionText 
+            role="heading"
+            aria-level="2"
+            id={`question-${currentQuestion + 1}`}
+          >
+            {currentQ.text}
+          </QuestionText>
+          <div role="group" aria-labelledby={`question-${currentQuestion + 1}`}>
           {currentQ.answers.map((answer, index) => (
             <Button
               key={index}
               onClick={() => handleAnswerClick(answer.score, index)}
               selected={selectedAnswer === answer.score}
               disabled={isTransitioning}
+              aria-label={`답변 ${index + 1}: ${answer.text}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  if (!isTransitioning) {
+                    handleAnswerClick(answer.score, index);
+                  }
+                }
+              }}
             >
               {answer.text}
             </Button>
           ))}
+          </div>
         </CloudCard>
       </CardWrapper>
 

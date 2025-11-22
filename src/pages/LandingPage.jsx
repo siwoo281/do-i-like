@@ -328,7 +328,16 @@ function LandingPage() {
         </AnimatedCloudCard>
       </CardWrapper>
 
-      <PrimaryButton onClick={handleStart}>
+      <PrimaryButton 
+        onClick={handleStart}
+        aria-label="테스트 시작하기"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleStart();
+          }
+        }}
+      >
         테스트 시작하기 💕
       </PrimaryButton>
     </StyledMobileContainer>

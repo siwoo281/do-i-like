@@ -277,6 +277,18 @@ const AnswerModal = styled.div`
   opacity: ${props => props.show ? 1 : 0};
   visibility: ${props => props.show ? 'visible' : 'hidden'};
   transition: opacity ${animation.normal}, visibility ${animation.normal};
+  
+  @media (max-width: 480px) {
+    padding: ${spacing.md};
+  }
+  
+  @media (max-width: 375px) {
+    padding: ${spacing.sm};
+  }
+  
+  @media (max-width: 360px) {
+    padding: ${spacing.xs};
+  }
 `;
 
 const AnswerModalContent = styled.div`
@@ -289,6 +301,23 @@ const AnswerModalContent = styled.div`
   overflow-y: auto;
   box-shadow: ${shadows.xxl};
   position: relative;
+  
+  @media (max-width: 480px) {
+    padding: ${spacing.lg};
+    max-height: 85vh;
+    border-radius: ${borderRadius.lg};
+  }
+  
+  @media (max-width: 375px) {
+    padding: ${spacing.md};
+    max-height: 90vh;
+    border-radius: ${borderRadius.md};
+  }
+  
+  @media (max-width: 360px) {
+    padding: ${spacing.sm};
+    max-height: 95vh;
+  }
 `;
 
 const AnswerModalHeader = styled.div`
@@ -296,6 +325,14 @@ const AnswerModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${spacing.lg};
+  
+  @media (max-width: 480px) {
+    margin-bottom: ${spacing.md};
+  }
+  
+  @media (max-width: 375px) {
+    margin-bottom: ${spacing.sm};
+  }
 `;
 
 const AnswerModalTitle = styled.h3`
@@ -303,6 +340,18 @@ const AnswerModalTitle = styled.h3`
   color: ${colors.primary};
   margin: 0;
   font-family: 'Jua', sans-serif;
+  
+  @media (max-width: 480px) {
+    font-size: ${fontSize.xl};
+  }
+  
+  @media (max-width: 375px) {
+    font-size: ${fontSize.lg};
+  }
+  
+  @media (max-width: 360px) {
+    font-size: ${fontSize.md};
+  }
 `;
 
 const CloseButton = styled.button`
@@ -317,9 +366,22 @@ const CloseButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   
   &:hover {
     color: ${colors.primary};
+  }
+  
+  @media (max-width: 480px) {
+    width: 28px;
+    height: 28px;
+    font-size: ${fontSize.xl};
+  }
+  
+  @media (max-width: 375px) {
+    width: 24px;
+    height: 24px;
+    font-size: ${fontSize.lg};
   }
 `;
 
@@ -333,6 +395,16 @@ const AnswerItem = styled.div`
     margin-bottom: 0;
     padding-bottom: 0;
   }
+  
+  @media (max-width: 480px) {
+    margin-bottom: ${spacing.md};
+    padding-bottom: ${spacing.md};
+  }
+  
+  @media (max-width: 375px) {
+    margin-bottom: ${spacing.sm};
+    padding-bottom: ${spacing.sm};
+  }
 `;
 
 const AnswerQuestion = styled.div`
@@ -342,6 +414,18 @@ const AnswerQuestion = styled.div`
   font-weight: 500;
   word-break: keep-all;
   line-height: 1.6;
+  white-space: pre-line;
+  
+  @media (max-width: 480px) {
+    font-size: ${fontSize.sm};
+    line-height: 1.55;
+    margin-bottom: ${spacing.xs};
+  }
+  
+  @media (max-width: 375px) {
+    font-size: ${fontSize.xs};
+    line-height: 1.5;
+  }
 `;
 
 const AnswerText = styled.div`
@@ -352,6 +436,18 @@ const AnswerText = styled.div`
   border-radius: ${borderRadius.sm};
   word-break: keep-all;
   line-height: 1.5;
+  white-space: pre-line;
+  
+  @media (max-width: 480px) {
+    font-size: ${fontSize.xs};
+    padding: ${spacing.xs} ${spacing.sm};
+    line-height: 1.45;
+  }
+  
+  @media (max-width: 375px) {
+    padding: ${spacing.xs} 10px;
+    line-height: 1.4;
+  }
 `;
 
 
@@ -577,6 +673,12 @@ function ResultPage() {
           onClick={handleSaveImage}
           disabled={isSavingImage}
           aria-label="결과 이미지 저장"
+          onKeyDown={(e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && !isSavingImage) {
+              e.preventDefault();
+              handleSaveImage();
+            }
+          }}
         >
           {isSavingImage ? '저장 중...' : '결과 이미지 저장 📸'}
         </Button>
@@ -585,6 +687,12 @@ function ResultPage() {
             variant="secondary" 
             onClick={handleShowAnswers}
             aria-label="내 답변 보기"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleShowAnswers();
+              }
+            }}
           >
             내 답변 보기 📝
           </Button>
@@ -593,6 +701,12 @@ function ResultPage() {
           variant="secondary" 
           onClick={handleShare}
           aria-label="친구에게 공유하기"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleShare();
+            }
+          }}
         >
           친구에게 공유하기 💌
         </Button>
@@ -600,16 +714,39 @@ function ResultPage() {
           variant="secondary" 
           onClick={handleRestart}
           aria-label="다시 테스트하기"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleRestart();
+            }
+          }}
         >
           다시 테스트하기 🔄
         </Button>
       </ButtonGroup>
 
-      <AnswerModal show={showAnswerModal} onClick={handleCloseModal}>
+      <AnswerModal 
+        show={showAnswerModal} 
+        onClick={handleCloseModal}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="answer-modal-title"
+      >
         <AnswerModalContent onClick={(e) => e.stopPropagation()}>
           <AnswerModalHeader>
-            <AnswerModalTitle>내 답변</AnswerModalTitle>
-            <CloseButton onClick={handleCloseModal}>×</CloseButton>
+            <AnswerModalTitle id="answer-modal-title">내 답변</AnswerModalTitle>
+            <CloseButton 
+              onClick={handleCloseModal}
+              aria-label="모달 닫기"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleCloseModal();
+                }
+              }}
+            >
+              ×
+            </CloseButton>
           </AnswerModalHeader>
           {answerHistory.map((answer, index) => {
             const question = questions[answer.questionId];
@@ -617,7 +754,7 @@ function ResultPage() {
             return (
               <AnswerItem key={index}>
                 <AnswerQuestion>
-                  질문 {answer.questionId + 1}. {question?.text.replace(/\n/g, ' ')}
+                  질문 {answer.questionId + 1}. {question?.text || '질문 없음'}
                 </AnswerQuestion>
                 <AnswerText>
                   {selectedAnswer?.text || '답변 없음'}

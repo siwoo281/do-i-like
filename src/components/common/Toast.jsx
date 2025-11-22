@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { colors, spacing, fontSize, borderRadius, shadows, animation } from '../../styles/theme';
 
@@ -41,9 +42,27 @@ export const Toast = ({ message, show, duration = 2000, onClose }) => {
   if (!message) return null;
 
   return (
-    <ToastContainer show={show}>
+    <ToastContainer 
+      show={show}
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       {message}
     </ToastContainer>
   );
+};
+
+Toast.propTypes = {
+  message: PropTypes.string,
+  show: PropTypes.bool.isRequired,
+  duration: PropTypes.number,
+  onClose: PropTypes.func,
+};
+
+Toast.defaultProps = {
+  message: '',
+  duration: 2000,
+  onClose: () => {},
 };
 
