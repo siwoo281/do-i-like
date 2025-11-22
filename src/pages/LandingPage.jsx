@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MobileContainer } from '../components/common/MobileContainer';
 import { CloudCard } from '../components/common/CloudCard';
+import { PrimaryButton } from '../components/common/Button';
 import { getRandomExample } from '../data/exampleSituations';
+import { colors, gradients, fontSize, spacing, borderRadius, animation } from '../styles/theme';
 
 const StyledMobileContainer = styled(MobileContainer)`
   justify-content: center;
@@ -13,7 +15,7 @@ const StyledMobileContainer = styled(MobileContainer)`
 const BgBubble = styled.div`
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.1) 100%);
+  background: ${gradients.bubble};
   opacity: 0.6;
   animation: floatUp 10s infinite linear;
   z-index: 0;
@@ -48,34 +50,33 @@ const BgBubble = styled.div`
 
 const EmotionText = styled.div`
   font-size: 15px;
-  color: #a67a8f; /* 더 진한 색으로 대비 개선 */
+  color: ${colors.textTertiary};
   font-style: italic;
-  margin-bottom: 16px;
+  margin-bottom: ${spacing.md};
   margin-top: 0;
-  letter-spacing: 0.02em; /* 자간 약간 증가 */
+  letter-spacing: 0.02em;
   text-align: center;
-  line-height: 1.7; /* 줄 간격 증가로 가독성 향상 */
+  line-height: 1.7;
   @media (max-width: 480px) {
-    font-size: 14px;
+    font-size: ${fontSize.sm};
     margin-bottom: 14px;
     line-height: 1.65;
   }
   
   @media (max-width: 375px) {
-    font-size: 13px;
-    margin-bottom: 12px;
+    font-size: ${fontSize.xs};
+    margin-bottom: ${spacing.sm};
     line-height: 1.6;
   }
   
   @media (max-width: 360px) {
-    font-size: 13px; /* 최소 크기 유지 */
+    font-size: ${fontSize.xs};
     margin-bottom: 10px;
     line-height: 1.55;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    margin-bottom: 8px;
+    margin-bottom: ${spacing.xs};
     line-height: 1.5;
   }
 `;
@@ -85,7 +86,7 @@ const Header = styled.header`
   text-align: center;
   z-index: 10;
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: ${spacing.lg};
   width: 100%;
   
   @media (max-width: 480px) {
@@ -93,35 +94,34 @@ const Header = styled.header`
   }
   
   @media (max-width: 375px) {
-    margin-bottom: 16px;
+    margin-bottom: ${spacing.md};
   }
   
   @media (max-width: 360px) {
     margin-bottom: 14px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    margin-bottom: 12px;
+    margin-bottom: ${spacing.sm};
   }
 `;
 
 const Title = styled.h1`
-  font-size: 32px;
-  font-size: clamp(24px, 8vw, 32px); /* 반응형 폰트 */
-  line-height: 1.4; /* 줄 간격 약간 증가 */
-  color: #FF5E89;
-  margin-bottom: 8px;
+  font-size: ${fontSize.huge};
+  font-size: clamp(24px, 8vw, ${fontSize.huge});
+  line-height: 1.4;
+  color: ${colors.primary};
+  margin-bottom: ${spacing.xs};
   margin-top: 0;
-  text-shadow: 2px 2px 0px #FFFFFF;
-  letter-spacing: -0.01em; /* 타이틀 자간 조정 */
+  text-shadow: 2px 2px 0px ${colors.textWhite};
+  letter-spacing: -0.01em;
   @media (max-width: 480px) {
-    font-size: 28px;
+    font-size: ${fontSize.xxxl};
     margin-bottom: 7px;
   }
   
   @media (max-width: 375px) {
-    font-size: 24px;
+    font-size: ${fontSize.xxl};
     margin-bottom: 6px;
     line-height: 1.35;
   }
@@ -131,21 +131,20 @@ const Title = styled.h1`
     margin-bottom: 5px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     margin-bottom: 4px;
   }
 `;
 
 const Subtitle = styled.p`
-  font-size: 18px; /* 글씨 크기 키움 */
-  font-size: clamp(16px, 5vw, 18px); /* 반응형 폰트 적용 */
-  color: #7a6a6a; /* 더 진한 색으로 대비 개선 */
+  font-size: ${fontSize.lg};
+  font-size: clamp(${fontSize.md}, 5vw, ${fontSize.lg});
+  color: ${colors.textSecondary};
   font-weight: normal;
-  line-height: 1.75; /* 줄 간격 증가로 가독성 향상 */
-  margin-top: 8px;
+  line-height: 1.75;
+  margin-top: ${spacing.xs};
   margin-bottom: 0;
-  letter-spacing: 0.01em; /* 자간 추가 */
+  letter-spacing: 0.01em;
   @media (max-width: 480px) {
     font-size: 17px;
     margin-top: 7px;
@@ -153,8 +152,8 @@ const Subtitle = styled.p`
   }
   
   @media (max-width: 375px) {
-    font-size: 16px;
-    line-height: 1.65; /* 줄 간격 개선 */
+    font-size: ${fontSize.md};
+    line-height: 1.65;
     margin-top: 6px;
   }
   
@@ -164,7 +163,6 @@ const Subtitle = styled.p`
     margin-top: 5px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     margin-top: 4px;
     line-height: 1.55;
@@ -178,23 +176,22 @@ const CardWrapper = styled.main`
   justify-content: center;
   align-items: center;
   flex: 1;
-  margin-bottom: 20px;
+  margin-bottom: ${spacing.lg};
   
   @media (max-width: 480px) {
     margin-bottom: 18px;
   }
   
   @media (max-width: 375px) {
-    margin-bottom: 16px;
+    margin-bottom: ${spacing.md};
   }
   
   @media (max-width: 360px) {
     margin-bottom: 14px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    margin-bottom: 12px;
+    margin-bottom: ${spacing.sm};
     flex: 0;
   }
 `;
@@ -224,45 +221,44 @@ const DecoIcon = styled.div`
 
 const Badge = styled.span`
   display: inline-block;
-  background: #FFE4E1;
-  color: #FF5E89;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: clamp(13px, 3.5vw, 14px); /* 반응형 폰트 추가 */
+  background: ${colors.secondaryLight};
+  color: ${colors.primary};
+  padding: 6px ${spacing.sm};
+  border-radius: ${borderRadius.sm};
+  font-size: clamp(${fontSize.xs}, 3.5vw, ${fontSize.sm});
   margin-bottom: 14px;
   margin-top: 0;
-  font-weight: 500; /* 가독성 향상 */
+  font-weight: 500;
   letter-spacing: 0.01em;
   
   @media (max-width: 480px) {
-    margin-bottom: 12px;
+    margin-bottom: ${spacing.sm};
   }
   
   @media (max-width: 375px) {
-    font-size: 13px;
-    padding: 5px 10px;
+    font-size: ${fontSize.xs};
+    padding: 5px ${spacing.xs};
     margin-bottom: 10px;
   }
   
   @media (max-width: 360px) {
-    font-size: 13px;
-    margin-bottom: 8px;
+    font-size: ${fontSize.xs};
+    margin-bottom: ${spacing.xs};
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     margin-bottom: 6px;
   }
 `;
 
 const CardText = styled.p`
-  font-size: 24px;
-  font-size: clamp(17px, 6vw, 24px); /* 반응형 폰트 - 최소 크기 17px로 증가 */
-  line-height: 1.7; /* 줄 간격 증가로 가독성 향상 */
-  color: #333;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
+  font-size: ${fontSize.xxl};
+  font-size: clamp(17px, 6vw, ${fontSize.xxl});
+  line-height: 1.7;
+  color: ${colors.textPrimary};
+  word-break: keep-all;
   margin: 0;
-  white-space: pre-line; /* 개행 문자 유지 */
+  white-space: pre-line;
   
   @media (max-width: 480px) {
     font-size: 19px;
@@ -270,75 +266,21 @@ const CardText = styled.p`
   }
   
   @media (max-width: 375px) {
-    font-size: 18px;
+    font-size: ${fontSize.lg};
     line-height: 1.6;
   }
   
   @media (max-width: 360px) {
-    font-size: 17px; /* 16px에서 17px로 증가 */
+    font-size: 17px;
     line-height: 1.55;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 17px;
     line-height: 1.5;
   }
 `;
 
-const CtaButton = styled.button`
-  width: 100%;
-  min-height: 56px; /* 터치 영역 최소 크기 (44px 권장, 여유있게 56px) */
-  padding: 16px 20px;
-  border: none;
-  border-radius: 50px;
-  background: linear-gradient(90deg, #FF9A9E 0%, #FECFEF 100%);
-  color: white;
-  font-size: 22px;
-  font-size: clamp(18px, 5vw, 22px); /* 반응형 폰트 */
-  font-family: 'Jua', sans-serif;
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(255, 117, 140, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
-  position: relative;
-  z-index: 10;
-  margin-top: 0;
-  -webkit-tap-highlight-color: transparent; /* 터치 하이라이트 제거 */
-  touch-action: manipulation; /* 더블탭 줌 방지 */
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 15px 30px rgba(255, 117, 140, 0.6);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-  
-  @media (max-width: 480px) {
-    font-size: 20px;
-    padding: 14px 18px;
-  }
-  
-  @media (max-width: 375px) {
-    font-size: 18px;
-    padding: 12px 16px;
-    min-height: 52px;
-  }
-  
-  @media (max-width: 360px) {
-    font-size: 16px;
-    padding: 11px 14px;
-    min-height: 48px;
-  }
-  
-  /* 가로 모드 대응 */
-  @media (orientation: landscape) and (max-height: 500px) {
-    font-size: 16px;
-    padding: 10px 18px;
-    min-height: 44px;
-  }
-`;
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -386,9 +328,9 @@ function LandingPage() {
         </AnimatedCloudCard>
       </CardWrapper>
 
-      <CtaButton onClick={handleStart}>
+      <PrimaryButton onClick={handleStart}>
         테스트 시작하기 💕
-      </CtaButton>
+      </PrimaryButton>
     </StyledMobileContainer>
   );
 }

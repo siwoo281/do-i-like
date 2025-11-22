@@ -49,6 +49,7 @@ export const spacing = {
   lg: '20px',
   xl: '24px',
   xxl: '32px',
+  xxxl: '28px',
 };
 
 /**

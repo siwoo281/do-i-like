@@ -1,21 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MobileContainer } from '../components/common/MobileContainer';
 import { CloudCard } from '../components/common/CloudCard';
 import { NavButton } from '../components/common/NavButton';
+import { Button } from '../components/common/Button';
 import { questions } from '../data/questions';
+import { colors, gradients, fontSize, spacing, borderRadius, shadows, animation } from '../styles/theme';
 
 const Header = styled.header`
   text-align: center;
   z-index: 10;
   width: 100%;
-  margin-bottom: 20px;
-  padding-top: 48px; /* 상단 버튼 공간 확보 */
+  margin-bottom: ${spacing.lg};
+  padding-top: 48px;
   
   @media (max-width: 480px) {
-    margin-bottom: 16px;
+    margin-bottom: ${spacing.md};
     padding-top: 44px;
   }
   
@@ -25,11 +27,10 @@ const Header = styled.header`
   }
   
   @media (max-width: 360px) {
-    margin-bottom: 12px;
+    margin-bottom: ${spacing.sm};
     padding-top: 38px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     margin-bottom: 10px;
     padding-top: 36px;
@@ -37,26 +38,26 @@ const Header = styled.header`
 `;
 
 const Title = styled.h1`
-  font-size: 28px;
-  font-size: clamp(20px, 7vw, 28px); /* 반응형 폰트 */
-  line-height: 1.45; /* 줄 간격 약간 증가 */
-  color: #FF5E89;
+  font-size: ${fontSize.xxxl};
+  font-size: clamp(20px, 7vw, ${fontSize.xxxl});
+  line-height: 1.45;
+  color: ${colors.primary};
   margin-bottom: 10px;
-  text-shadow: 2px 2px 0px #FFFFFF;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
-  letter-spacing: -0.01em; /* 타이틀 자간 조정 */
+  text-shadow: 2px 2px 0px ${colors.textWhite};
+  word-break: keep-all;
+  letter-spacing: -0.01em;
   
   @media (max-width: 480px) {
-    font-size: 24px;
+    font-size: ${fontSize.xxl};
   }
   
   @media (max-width: 375px) {
-    font-size: 20px;
+    font-size: ${fontSize.xl};
     line-height: 1.35;
   }
   
   @media (max-width: 360px) {
-    font-size: 19px; /* 18px에서 19px로 증가 */
+    font-size: 19px;
     line-height: 1.3;
   }
 `;
@@ -67,7 +68,7 @@ const ProgressBar = styled.div`
   background: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   overflow: hidden;
-  margin-top: 12px;
+  margin-top: ${spacing.sm};
   
   @media (max-width: 480px) {
     margin-top: 10px;
@@ -75,7 +76,7 @@ const ProgressBar = styled.div`
   }
   
   @media (max-width: 375px) {
-    margin-top: 8px;
+    margin-top: ${spacing.xs};
     height: 6px;
   }
   
@@ -84,7 +85,6 @@ const ProgressBar = styled.div`
     height: 5px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     margin-top: 6px;
     height: 5px;
@@ -93,9 +93,9 @@ const ProgressBar = styled.div`
 
 const ProgressFill = styled.div`
   height: 100%;
-  background: linear-gradient(90deg, #FF9A9E 0%, #FECFEF 100%);
+  background: ${gradients.progress};
   border-radius: 10px;
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width ${animation.slow} cubic-bezier(0.4, 0, 0.2, 1);
   width: ${props => props.progress}%;
   position: relative;
   overflow: hidden;
@@ -107,12 +107,7 @@ const ProgressFill = styled.div`
     left: 0;
     bottom: 0;
     right: 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.3),
-      transparent
-    );
+    background: ${gradients.shimmer};
     animation: shimmer 2s infinite;
   }
   
@@ -129,126 +124,59 @@ const CardWrapper = styled.main`
   justify-content: center;
   align-items: flex-start;
   flex: 1;
-  padding-bottom: 16px;
+  padding-bottom: ${spacing.md};
   
   @media (max-width: 480px) {
     padding-bottom: 14px;
   }
   
   @media (max-width: 375px) {
-    padding-bottom: 12px;
+    padding-bottom: ${spacing.sm};
   }
   
   @media (max-width: 360px) {
     padding-bottom: 10px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    padding-bottom: 8px;
+    padding-bottom: ${spacing.xs};
     align-items: center;
   }
 `;
 
 
 const QuestionText = styled.p`
-  font-size: 24px;
-  font-size: clamp(18px, 6vw, 24px); /* 반응형 폰트 */
+  font-size: ${fontSize.xxl};
+  font-size: clamp(18px, 6vw, ${fontSize.xxl});
   line-height: 1.6;
-  color: #333;
+  color: ${colors.textPrimary};
   margin-bottom: 26px;
   margin-top: 0;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
-  white-space: pre-line; /* 개행 문자 적용 */
+  word-break: keep-all;
+  white-space: pre-line;
   
   @media (max-width: 480px) {
-    font-size: 20px;
+    font-size: ${fontSize.xl};
     margin-bottom: 22px;
     line-height: 1.55;
   }
   
   @media (max-width: 375px) {
-    font-size: 18px;
-    margin-bottom: 18px;
+    font-size: ${fontSize.lg};
+    margin-bottom: ${spacing.lg};
     line-height: 1.5;
   }
   
   @media (max-width: 360px) {
     font-size: 17px;
-    margin-bottom: 16px;
+    margin-bottom: ${spacing.md};
     line-height: 1.45;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    font-size: 16px;
-    margin-bottom: 12px;
+    font-size: ${fontSize.md};
+    margin-bottom: ${spacing.sm};
     line-height: 1.4;
-  }
-`;
-
-const AnswerButton = styled.button`
-  width: 100%;
-  min-height: 56px; /* 터치 영역 최소 크기 상향 */
-  padding: 16px 18px;
-  margin-bottom: 12px;
-  border: none;
-  border-radius: 30px;
-  background: ${props => props.selected 
-    ? 'linear-gradient(90deg, #FF9A9E 0%, #FECFEF 100%)' 
-    : 'rgba(255, 255, 255, 0.8)'};
-  color: ${props => props.selected ? 'white' : '#333'};
-  font-size: 18px;
-  font-size: clamp(16px, 4.5vw, 18px); /* 반응형 폰트 */
-  font-family: 'Jua', sans-serif;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  box-shadow: ${props => props.selected 
-    ? '0 10px 20px rgba(255, 117, 140, 0.4)' 
-    : '0 5px 15px rgba(255, 148, 178, 0.2)'};
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, opacity 0.2s;
-  border: 2px solid ${props => props.selected ? '#FF5E89' : 'transparent'};
-  opacity: ${props => props.disabled ? 0.6 : 1};
-  -webkit-tap-highlight-color: transparent; /* 터치 하이라이트 제거 */
-  touch-action: manipulation; /* 더블탭 줌 방지 */
-
-  &:hover:not(:disabled) {
-    transform: scale(1.03);
-    box-shadow: 0 8px 20px rgba(255, 117, 140, 0.5);
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.97);
-  }
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-  
-  @media (max-width: 480px) {
-    font-size: 17px;
-    padding: 14px 16px;
-    margin-bottom: 11px;
-  }
-  
-  @media (max-width: 375px) {
-    font-size: 16px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-  }
-  
-  @media (max-width: 360px) {
-    font-size: 15px;
-    padding: 11px 12px;
-    margin-bottom: 9px;
-    min-height: 48px;
-  }
-  
-  /* 가로 모드 대응 */
-  @media (orientation: landscape) and (max-height: 500px) {
-    font-size: 15px;
-    padding: 10px 16px;
-    min-height: 44px;
-    margin-bottom: 8px;
   }
 `;
 
@@ -261,7 +189,7 @@ function QuestionPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [answerHistory, setAnswerHistory] = useState([]); // 이전 답변 기록
 
-  const handleAnswerClick = (answerScore) => {
+  const handleAnswerClick = (answerScore, answerIndex) => {
     if (isTransitioning) return; // 중복 클릭 방지
 
     setSelectedAnswer(answerScore);
@@ -269,14 +197,17 @@ function QuestionPage() {
 
     setTimeout(() => {
       const newScore = score + answerScore;
+      const newHistory = [...answerHistory, { questionId: currentQuestion, answerIndex: answerIndex, score: answerScore }];
       setScore(newScore);
-      setAnswerHistory([...answerHistory, answerScore]);
+      setAnswerHistory(newHistory);
 
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
         setSelectedAnswer(null);
         setIsTransitioning(false);
       } else {
+        // 답변 기록을 sessionStorage에 저장
+        sessionStorage.setItem('answerHistory', JSON.stringify(newHistory));
         navigate(`/result?score=${newScore}`);
       }
     }, 500);
@@ -285,15 +216,52 @@ function QuestionPage() {
   // 이전 질문으로 이동
   const handlePrev = () => {
     if (currentQuestion === 0 || isTransitioning) return;
-    const prevAnswer = answerHistory[answerHistory.length - 1] || 0;
-    setCurrentQuestion(currentQuestion - 1);
-    setScore(score - prevAnswer);
+    const prevAnswer = answerHistory[answerHistory.length - 1];
+    if (!prevAnswer) return;
+    const prevQuestionIndex = currentQuestion - 1;
+    const prevQuestion = questions[prevQuestionIndex];
+    
+    // 유효성 검증
+    if (!prevQuestion || !prevQuestion.answers) {
+      console.error('이전 질문을 불러올 수 없습니다.');
+      return;
+    }
+    
+    const answerIndex = prevAnswer.answerIndex;
+    if (answerIndex < 0 || answerIndex >= prevQuestion.answers.length) {
+      console.error('답변 인덱스가 유효하지 않습니다.');
+      return;
+    }
+    
+    const prevSelectedScore = prevQuestion.answers[answerIndex]?.score;
+    
+    setCurrentQuestion(prevQuestionIndex);
+    setScore(score - prevAnswer.score);
     setAnswerHistory(answerHistory.slice(0, -1));
-    setSelectedAnswer(null);
+    setSelectedAnswer(prevSelectedScore || null);
   };
+
+  // 질문 변경 시 스크롤 위치 초기화
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentQuestion]);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const currentQ = questions[currentQuestion];
+
+  // 질문이 없을 경우 에러 처리
+  if (!currentQ || !currentQ.answers || currentQ.answers.length === 0) {
+    return (
+      <MobileContainer>
+        <CloudCard>
+          <QuestionText>질문을 불러올 수 없습니다.</QuestionText>
+          <Button onClick={() => navigate('/')}>
+            메인으로 돌아가기
+          </Button>
+        </CloudCard>
+      </MobileContainer>
+    );
+  }
 
   return (
     <MobileContainer>
@@ -318,14 +286,14 @@ function QuestionPage() {
         <CloudCard>
           <QuestionText>{currentQ.text}</QuestionText>
           {currentQ.answers.map((answer, index) => (
-            <AnswerButton
+            <Button
               key={index}
-              onClick={() => handleAnswerClick(answer.score)}
+              onClick={() => handleAnswerClick(answer.score, index)}
               selected={selectedAnswer === answer.score}
               disabled={isTransitioning}
             >
               {answer.text}
-            </AnswerButton>
+            </Button>
           ))}
         </CloudCard>
       </CardWrapper>

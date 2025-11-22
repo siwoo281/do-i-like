@@ -5,12 +5,16 @@ import styled from 'styled-components';
 import confetti from 'canvas-confetti';
 import { MobileContainer } from '../components/common/MobileContainer';
 import { QuoteText } from '../components/common/QuoteText';
+import { Button } from '../components/common/Button';
+import { Toast } from '../components/common/Toast';
 import { getResultByScore } from '../data/results';
+import { questions } from '../data/questions';
 import { createShareText, createShareUrl, copyToClipboard, shareNative } from '../utils/share';
+import { colors, shadows, borderRadius, spacing, fontSize, animation } from '../styles/theme';
 
 const StyledMobileContainer = styled(MobileContainer)`
   justify-content: flex-start;
-  gap: 24px;
+  gap: ${spacing.xl};
   padding-top: 30px;
   
   @media (max-width: 480px) {
@@ -19,80 +23,78 @@ const StyledMobileContainer = styled(MobileContainer)`
   }
   
   @media (max-width: 375px) {
-    gap: 20px;
+    gap: ${spacing.lg};
     padding-top: 22px;
   }
   
   @media (max-width: 360px) {
     gap: 18px;
-    padding-top: 20px;
+    padding-top: ${spacing.lg};
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    gap: 16px;
-    padding-top: 16px;
+    gap: ${spacing.md};
+    padding-top: ${spacing.md};
   }
 `;
 
 const ResultCard = styled.div`
-  background: #fff;
+  background: ${colors.cardBackground};
   width: 100%;
-  padding: 40px 28px;
-  border-radius: 32px;
-  box-shadow: 0 8px 32px rgba(255, 148, 178, 0.25);
-  border: 2px solid #FFB6C1;
+  padding: 40px ${spacing.xxxl};
+  border-radius: ${borderRadius.xl};
+  box-shadow: ${shadows.lg};
+  border: 2px solid ${colors.secondary};
   margin-top: 0;
   margin-bottom: 0;
   text-align: center;
   position: relative;
   z-index: 5;
   box-sizing: border-box;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow ${animation.fast}, transform ${animation.fast};
 
   &:active {
-    box-shadow: 0 4px 16px rgba(255, 148, 178, 0.18);
+    box-shadow: ${shadows.active};
     transform: scale(0.98);
   }
 
   @media (max-width: 480px) {
-    padding: 36px 24px;
+    padding: 36px ${spacing.xl};
   }
   
   @media (max-width: 375px) {
-    padding: 32px 22px;
-    border-radius: 28px;
+    padding: ${spacing.xxl} 22px;
+    border-radius: ${borderRadius.md};
   }
   
   @media (max-width: 360px) {
-    padding: 28px 20px;
-    border-radius: 24px;
+    padding: ${spacing.xxxl} ${spacing.lg};
+    border-radius: ${borderRadius.md};
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    padding: 24px 20px;
-    border-radius: 24px;
+    padding: ${spacing.xl} ${spacing.lg};
+    border-radius: ${borderRadius.md};
   }
 `;
 
 const ResultTitle = styled.h2`
-  font-size: 32px;
-  font-size: clamp(24px, 8vw, 32px); /* 반응형 폰트 */
-  color: #FF5E89;
-  margin-bottom: 20px;
+  font-size: ${fontSize.huge};
+  font-size: clamp(24px, 8vw, ${fontSize.huge});
+  color: ${colors.primary};
+  margin-bottom: ${spacing.lg};
   margin-top: 0;
-  text-shadow: 2px 2px 0px #FFFFFF;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
+  text-shadow: 2px 2px 0px ${colors.textWhite};
+  word-break: keep-all;
   
   @media (max-width: 480px) {
-    font-size: 28px;
+    font-size: ${fontSize.xxxl};
     margin-bottom: 18px;
   }
   
   @media (max-width: 375px) {
-    font-size: 24px;
-    margin-bottom: 16px;
+    font-size: ${fontSize.xxl};
+    margin-bottom: ${spacing.md};
   }
   
   @media (max-width: 360px) {
@@ -100,16 +102,15 @@ const ResultTitle = styled.h2`
     margin-bottom: 14px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    font-size: 20px;
-    margin-bottom: 12px;
+    font-size: ${fontSize.xl};
+    margin-bottom: ${spacing.sm};
   }
 `;
 
 const ResultEmoji = styled.div`
   font-size: 64px;
-  margin-bottom: 16px;
+  margin-bottom: ${spacing.md};
   margin-top: 0;
   
   @media (max-width: 480px) {
@@ -119,7 +120,7 @@ const ResultEmoji = styled.div`
   
   @media (max-width: 375px) {
     font-size: 56px;
-    margin-bottom: 12px;
+    margin-bottom: ${spacing.sm};
   }
   
   @media (max-width: 360px) {
@@ -127,7 +128,6 @@ const ResultEmoji = styled.div`
     margin-bottom: 10px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 48px;
     margin-bottom: 10px;
@@ -135,18 +135,18 @@ const ResultEmoji = styled.div`
 `;
 
 const ResultText = styled.p`
-  font-size: 20px;
-  font-size: clamp(16px, 5vw, 20px); /* 반응형 폰트 */
+  font-size: ${fontSize.xl};
+  font-size: clamp(${fontSize.md}, 5vw, ${fontSize.xl});
   line-height: 1.8;
-  color: #333;
+  color: ${colors.textPrimary};
   margin-bottom: 18px;
   margin-top: 0;
   white-space: pre-line;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
+  word-break: keep-all;
   
   @media (max-width: 480px) {
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: ${fontSize.lg};
+    margin-bottom: ${spacing.md};
     line-height: 1.75;
   }
   
@@ -157,12 +157,11 @@ const ResultText = styled.p`
   }
   
   @media (max-width: 360px) {
-    font-size: 16px;
-    margin-bottom: 12px;
+    font-size: ${fontSize.md};
+    margin-bottom: ${spacing.sm};
     line-height: 1.65;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 15px;
     margin-bottom: 10px;
@@ -171,14 +170,14 @@ const ResultText = styled.p`
 `;
 
 const ScoreText = styled.div`
-  font-size: 18px;
-  font-size: clamp(16px, 4.5vw, 18px); /* 반응형 폰트 */
-  color: #7a6a6a; /* 더 진한 색으로 대비 개선 */
+  font-size: ${fontSize.lg};
+  font-size: clamp(${fontSize.md}, 4.5vw, ${fontSize.lg});
+  color: ${colors.textSecondary};
   margin-bottom: 0;
-  margin-top: 12px;
+  margin-top: ${spacing.sm};
   word-break: keep-all;
-  font-weight: 500; /* 가독성 향상 */
-  letter-spacing: 0.01em; /* 자간 추가 */
+  font-weight: 500;
+  letter-spacing: 0.01em;
   
   @media (max-width: 480px) {
     font-size: 17px;
@@ -187,15 +186,14 @@ const ScoreText = styled.div`
   
   @media (max-width: 375px) {
     font-size: 17px;
-    margin-top: 8px;
+    margin-top: ${spacing.xs};
   }
   
   @media (max-width: 360px) {
-    font-size: 16px;
-    margin-top: 8px;
+    font-size: ${fontSize.md};
+    margin-top: ${spacing.xs};
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
     font-size: 15px;
     margin-top: 6px;
@@ -206,7 +204,7 @@ const ButtonGroup = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: ${spacing.sm};
   margin-top: 0;
   margin-bottom: 0;
   
@@ -222,90 +220,209 @@ const ButtonGroup = styled.div`
     gap: 9px;
   }
   
-  /* 가로 모드 대응 */
   @media (orientation: landscape) and (max-height: 500px) {
-    gap: 8px;
-  }
-`;
-
-const ActionButton = styled.button`
-  width: 100%;
-  min-height: 56px; /* 터치 영역 최소 크기 상향 */
-  padding: 16px 18px;
-  border: none;
-  border-radius: 30px;
-  background: ${props => props.variant === 'primary' 
-    ? 'linear-gradient(90deg, #FF9A9E 0%, #FECFEF 100%)' 
-    : 'rgba(255, 255, 255, 0.9)'};
-  color: ${props => props.variant === 'primary' ? 'white' : '#FF5E89'};
-  font-size: 18px;
-  font-size: clamp(16px, 4.5vw, 18px); /* 반응형 폰트 */
-  font-family: 'Jua', sans-serif;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  box-shadow: 0 10px 20px rgba(255, 117, 140, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-  border: ${props => props.variant === 'secondary' ? '2px solid #FF5E89' : 'none'};
-  opacity: ${props => props.disabled ? 0.6 : 1};
-  -webkit-tap-highlight-color: transparent; /* 터치 하이라이트 제거 */
-  touch-action: manipulation; /* 더블탭 줌 방지 */
-
-  &:hover:not(:disabled) {
-    transform: scale(1.05);
-    box-shadow: 0 15px 30px rgba(255, 117, 140, 0.6);
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.95);
-  }
-  
-  @media (max-width: 480px) {
-    font-size: 17px;
-    padding: 14px 16px;
-  }
-  
-  @media (max-width: 375px) {
-    font-size: 16px;
-    padding: 12px 14px;
-  }
-  
-  @media (max-width: 360px) {
-    font-size: 15px;
-    padding: 11px 12px;
-    min-height: 48px;
-  }
-  
-  /* 가로 모드 대응 */
-  @media (orientation: landscape) and (max-height: 500px) {
-    font-size: 15px;
-    padding: 10px 16px;
-    min-height: 44px;
+    gap: ${spacing.xs};
   }
 `;
 
 const LoadingContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-size: 20px;
-  color: #FF5E89;
+  gap: ${spacing.md};
+  font-size: ${fontSize.xl};
+  color: ${colors.primary};
   font-family: 'Jua', sans-serif;
+`;
+
+const Spinner = styled.div`
+  width: 40px;
+  height: 40px;
+  border: 4px solid ${colors.secondary};
+  border-top-color: ${colors.primary};
+  border-radius: 50%;
+  animation: spin ${animation.slow} linear infinite;
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @media (max-width: 480px) {
+    width: 36px;
+    height: 36px;
+    border-width: 3px;
+  }
+  
+  @media (max-width: 375px) {
+    width: 32px;
+    height: 32px;
+  }
+`;
+
+const AnswerModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: ${spacing.lg};
+  opacity: ${props => props.show ? 1 : 0};
+  visibility: ${props => props.show ? 'visible' : 'hidden'};
+  transition: opacity ${animation.normal}, visibility ${animation.normal};
+`;
+
+const AnswerModalContent = styled.div`
+  background: ${colors.cardBackground};
+  border-radius: ${borderRadius.xl};
+  padding: ${spacing.xl};
+  max-width: 400px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: ${shadows.xxl};
+  position: relative;
+`;
+
+const AnswerModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${spacing.lg};
+`;
+
+const AnswerModalTitle = styled.h3`
+  font-size: ${fontSize.xxl};
+  color: ${colors.primary};
+  margin: 0;
+  font-family: 'Jua', sans-serif;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: ${fontSize.xxl};
+  cursor: pointer;
+  color: ${colors.textSecondary};
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    color: ${colors.primary};
+  }
+`;
+
+const AnswerItem = styled.div`
+  margin-bottom: ${spacing.lg};
+  padding-bottom: ${spacing.lg};
+  border-bottom: 1px solid ${colors.secondary};
+  
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+`;
+
+const AnswerQuestion = styled.div`
+  font-size: ${fontSize.md};
+  color: ${colors.textPrimary};
+  margin-bottom: ${spacing.sm};
+  font-weight: 500;
+  word-break: keep-all;
+  line-height: 1.6;
+`;
+
+const AnswerText = styled.div`
+  font-size: ${fontSize.sm};
+  color: ${colors.textSecondary};
+  padding: ${spacing.sm} ${spacing.md};
+  background: ${colors.secondaryLight};
+  border-radius: ${borderRadius.sm};
+  word-break: keep-all;
+  line-height: 1.5;
 `;
 
 
 function ResultPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const score = parseInt(searchParams.get('score')) || 0;
+  // 점수 범위 검증 (0-36)
+  const rawScore = parseInt(searchParams.get('score')) || 0;
+  const score = Math.max(0, Math.min(36, isNaN(rawScore) ? 0 : rawScore));
   const [result, setResult] = useState(null);
   const resultCardRef = useRef(null);
   const [hasTriggeredEffects, setHasTriggeredEffects] = useState(false);
   const [isSavingImage, setIsSavingImage] = useState(false);
+  const [showAnswerModal, setShowAnswerModal] = useState(false);
+  const [answerHistory, setAnswerHistory] = useState([]);
+  const [toast, setToast] = useState({ show: false, message: '' });
+
+  // 페이지 진입 시 스크롤 최상단으로 이동
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const handleCloseModal = () => {
+    setShowAnswerModal(false);
+  };
+
+  // 모달 ESC 키 지원
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && showAnswerModal) {
+        handleCloseModal();
+      }
+    };
+    
+    if (showAnswerModal) {
+      document.addEventListener('keydown', handleEscape);
+      // 모달 열릴 때 body 스크롤 잠금
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
+  }, [showAnswerModal]);
 
   useEffect(() => {
     // 점수에 따라 결과 결정
     const selectedResult = getResultByScore(score);
     setResult(selectedResult);
+    
+    // 답변 기록 불러오기
+    const savedHistory = sessionStorage.getItem('answerHistory');
+    if (savedHistory) {
+      try {
+        const parsed = JSON.parse(savedHistory);
+        // 배열인지 확인
+        if (Array.isArray(parsed)) {
+          setAnswerHistory(parsed);
+        } else {
+          setAnswerHistory([]);
+        }
+      } catch (e) {
+        console.error('답변 기록 불러오기 실패:', e);
+        setAnswerHistory([]);
+      }
+    } else {
+      setAnswerHistory([]);
+    }
 
     // 효과는 한 번만 실행
     if (!hasTriggeredEffects) {
@@ -354,6 +471,14 @@ function ResultPage() {
     }
   }, [score, hasTriggeredEffects]);
 
+  const showToast = (message) => {
+    setToast({ show: true, message });
+  };
+
+  const hideToast = () => {
+    setToast({ show: false, message: '' });
+  };
+
   const handleSaveImage = async () => {
     if (!resultCardRef.current || isSavingImage || !result) return;
 
@@ -369,14 +494,17 @@ function ResultPage() {
       });
       
       const link = document.createElement('a');
-      link.download = `애매한감정_${result.title}.png`;
+      // 파일명 정제 (특수문자 제거)
+      const sanitizedTitle = result.title.replace(/[^a-zA-Z0-9가-힣]/g, '_');
+      link.download = `애매한감정_${sanitizedTitle}.png`;
       link.href = canvas.toDataURL('image/png');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      showToast('이미지가 저장되었습니다! 📸');
     } catch (error) {
       console.error('이미지 저장 실패:', error);
-      alert('이미지 저장에 실패했습니다. 다시 시도해주세요.');
+      showToast('이미지 저장에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsSavingImage(false);
     }
@@ -396,6 +524,7 @@ function ResultPage() {
     });
 
     if (shared) {
+      showToast('공유되었습니다! 💌');
       return; // 공유 성공
     }
 
@@ -404,19 +533,25 @@ function ResultPage() {
     const copied = await copyToClipboard(textToCopy);
 
     if (copied) {
-      alert('링크가 클립보드에 복사되었습니다!');
+      showToast('링크가 클립보드에 복사되었습니다! 💌');
     } else {
-      alert('공유 기능을 사용할 수 없습니다. 링크를 수동으로 복사해주세요.');
+      showToast('공유 기능을 사용할 수 없습니다. 링크를 수동으로 복사해주세요.');
     }
   };
 
   const handleRestart = () => {
+    sessionStorage.removeItem('answerHistory');
     navigate('/');
+  };
+
+  const handleShowAnswers = () => {
+    setShowAnswerModal(true);
   };
 
   if (!result) {
     return (
       <LoadingContainer>
+        <Spinner />
         <div>로딩 중...</div>
       </LoadingContainer>
     );
@@ -437,29 +572,67 @@ function ResultPage() {
       </ResultCard>
 
       <ButtonGroup>
-        <ActionButton 
+        <Button 
           variant="primary" 
           onClick={handleSaveImage}
           disabled={isSavingImage}
           aria-label="결과 이미지 저장"
         >
           {isSavingImage ? '저장 중...' : '결과 이미지 저장 📸'}
-        </ActionButton>
-        <ActionButton 
+        </Button>
+        {answerHistory.length > 0 && (
+          <Button 
+            variant="secondary" 
+            onClick={handleShowAnswers}
+            aria-label="내 답변 보기"
+          >
+            내 답변 보기 📝
+          </Button>
+        )}
+        <Button 
           variant="secondary" 
           onClick={handleShare}
           aria-label="친구에게 공유하기"
         >
           친구에게 공유하기 💌
-        </ActionButton>
-        <ActionButton 
+        </Button>
+        <Button 
           variant="secondary" 
           onClick={handleRestart}
           aria-label="다시 테스트하기"
         >
           다시 테스트하기 🔄
-        </ActionButton>
+        </Button>
       </ButtonGroup>
+
+      <AnswerModal show={showAnswerModal} onClick={handleCloseModal}>
+        <AnswerModalContent onClick={(e) => e.stopPropagation()}>
+          <AnswerModalHeader>
+            <AnswerModalTitle>내 답변</AnswerModalTitle>
+            <CloseButton onClick={handleCloseModal}>×</CloseButton>
+          </AnswerModalHeader>
+          {answerHistory.map((answer, index) => {
+            const question = questions[answer.questionId];
+            const selectedAnswer = question?.answers[answer.answerIndex];
+            return (
+              <AnswerItem key={index}>
+                <AnswerQuestion>
+                  질문 {answer.questionId + 1}. {question?.text.replace(/\n/g, ' ')}
+                </AnswerQuestion>
+                <AnswerText>
+                  {selectedAnswer?.text || '답변 없음'}
+                </AnswerText>
+              </AnswerItem>
+            );
+          })}
+        </AnswerModalContent>
+      </AnswerModal>
+
+      <Toast 
+        message={toast.message} 
+        show={toast.show} 
+        onClose={hideToast}
+      />
     </StyledMobileContainer>
   );
 }

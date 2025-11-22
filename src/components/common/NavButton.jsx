@@ -1,20 +1,21 @@
 import styled from 'styled-components';
+import { colors, shadows, borderRadius, fontSize, spacing, animation } from '../../styles/theme';
 
 export const NavButton = styled.button`
   position: absolute;
   left: 0;
   top: 0;
-  padding: 8px 12px;
+  padding: ${spacing.xs} ${spacing.sm};
   min-height: 40px;
-  border-radius: 20px;
+  border-radius: ${borderRadius.sm};
   border: none;
-  background: #FECFEF;
-  color: #FF5E89;
+  background: ${colors.primaryLighter};
+  color: ${colors.primary};
   font-family: 'Jua', sans-serif;
-  font-size: clamp(13px, 3.5vw, 14px);
-  box-shadow: 0 2px 8px rgba(255, 148, 178, 0.12);
+  font-size: clamp(${fontSize.xs}, 3.5vw, ${fontSize.sm});
+  box-shadow: ${shadows.sm};
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity ${animation.fast}, transform ${animation.fast};
   z-index: 20;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -33,11 +34,11 @@ export const NavButton = styled.button`
   @media (max-width: 480px) {
     padding: 7px 11px;
     min-height: 38px;
-    font-size: clamp(12px, 3.2vw, 13px);
+    font-size: clamp(12px, 3.2vw, ${fontSize.xs});
   }
 
   @media (max-width: 375px) {
-    padding: 6px 10px;
+    padding: 6px ${spacing.xs};
     min-height: 36px;
   }
 
